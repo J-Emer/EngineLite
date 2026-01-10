@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EngineLite")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eacd416ae40ca785d250586890d695efecf5b28a")]
 [assembly: System.Reflection.AssemblyProductAttribute("EngineLite")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EngineLite")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
