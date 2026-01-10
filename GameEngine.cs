@@ -42,12 +42,21 @@ namespace EngineLite
             Instance = this;
         }
 
-        public void Core()
+        public void Load(string settingsPath, Vector2 cameraPos, float cameraZoom)
+        {
+            Core();
+            Managers(settingsPath);
+            Debug();
+            ECS();
+            LoadCamera(cameraPos, cameraZoom);
+        }
+
+        private void Core()
         {
             AssetLoader.Init(Content, _graphics.GraphicsDevice, _defaultFont);
         }
 
-        public void Managers(string settingsFile)
+        private void Managers(string settingsFile)
         {
             new SettingsManager(settingsFile);
             new WindowManager(Window);
@@ -61,7 +70,7 @@ namespace EngineLite
             _needsSceneChange = true;
         }
 
-        public void Debug()
+        private void Debug()
         {
             new OnScreenLog(AssetLoader.DefaultFont);
             new Stats(new Vector2(1000, 10));          
@@ -71,7 +80,7 @@ namespace EngineLite
             Stats.Instance.Add("Scene", SceneManager.Instance.GetActiveSceneName);
         }
 
-        public void ECS()
+        private void ECS()
         {
             PhysicsWorld.Init();
             new EntityWorld();
@@ -89,7 +98,7 @@ namespace EngineLite
             new UISystem();
         }
 
-        public void LoadCamera(Vector2 position, float zoom)
+        private void LoadCamera(Vector2 position, float zoom)
         {   
             Camera.Position = position;
             Camera.Zoom = zoom;
