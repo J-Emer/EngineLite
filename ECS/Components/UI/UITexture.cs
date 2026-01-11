@@ -32,6 +32,7 @@ namespace EngineLite.Engine.ECS.Components.UI
         }
         private string _textureName = null;
         
+        public Vector2 TextureSize{get;set;} = new Vector2(16,16);
         
         
         public Action OnClick;
@@ -73,10 +74,19 @@ namespace EngineLite.Engine.ECS.Components.UI
 
             if(Texture != null)
             {
-                Vector2 _textureSize = new Vector2(Texture.Width, Texture.Height);
-                Vector2 _halfTextureSize = _textureSize * 0.5f;
+                // Vector2 _textureSize = new Vector2(Texture.Width, Texture.Height);
+                // Vector2 _halfTextureSize = _textureSize * 0.5f;
 
-                spriteBatch.Draw(Texture, Center - _halfTextureSize, BackgroundColor);                
+                // Vector2 pos = Center - _halfTextureSize;
+
+                Rectangle _textureRect = new Rectangle(
+                    (int)Position.X,
+                    (int)Position.Y,
+                    (int)TextureSize.X,
+                    (int)TextureSize.Y
+                );
+
+                spriteBatch.Draw(Texture, _textureRect, BackgroundColor);              
             }
 
             if(!_showBorder){return;}
