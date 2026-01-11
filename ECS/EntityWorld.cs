@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using EngineLite.Engine.EngineDebug;
 using EngineLite.Engine.IO;
@@ -28,15 +29,17 @@ namespace EngineLite.Engine.ECS
             return new Entity(id);
         }
 
-        public void DestroyEntity(Entity entity)
+        public void DestroyEntity(int id)
         {
-            _entities.Remove(entity.Id);
-
+            if (!_entities.Remove(id))
+                return;
+        
             foreach (var pool in _componentPools.Values)
             {
-                var dictType = pool.GetType();
-                var removeMethod = dictType.GetMethod("Remove");
-                removeMethod.Invoke(pool, new object[] { entity.Id });
+                if (pool is IDictionary dict)
+                {
+                    dict.Remove(id);
+                }
             }
         }
 
