@@ -42,10 +42,10 @@ namespace EngineLite
             Instance = this;
         }
 
-        public void Load(string settingsPath, Vector2 cameraPos, float cameraZoom)
+        public void Load(Settings _settings, Vector2 cameraPos, float cameraZoom)
         {
             Core();
-            Managers(settingsPath);
+            Managers(_settings);
             Debug();
             ECS();
             LoadCamera(cameraPos, cameraZoom);
@@ -56,9 +56,9 @@ namespace EngineLite
             AssetLoader.Init(Content, _graphics.GraphicsDevice, _defaultFont);
         }
 
-        private void Managers(string settingsFile)
+        private void Managers(Settings _settings)
         {
-            new SettingsManager(settingsFile);
+            new SettingsManager(_settings);
             new WindowManager(Window);
             new ResolutionManager(_graphics, new Resolution(1280, 720, false));
             _graphics.ApplyChanges();

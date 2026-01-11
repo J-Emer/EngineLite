@@ -6,6 +6,7 @@ namespace EngineLite.Engine.ECS.Components.UI
 {
     public abstract class UIComponent
     {
+        public string Name{get;set;} = "UIComponent";
         public Vector2 Position
         {
             get => _position;
@@ -54,7 +55,10 @@ namespace EngineLite.Engine.ECS.Components.UI
         }
 
 
-
+        public override string ToString()
+        {
+            return $"Name: {Name} | Position: {Position} | Scale: {Scale} | BackgroundColor: {BackgroundColor}";
+        }
     }
 
 
