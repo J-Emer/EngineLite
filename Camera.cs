@@ -2,7 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EngineLite.Engine.ECS
+namespace EngineLite
 {
     public class Camera
     {

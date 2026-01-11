@@ -60,7 +60,7 @@ namespace EngineLite
         {
             new SettingsManager(settingsFile);
             new WindowManager(Window);
-            new ResolutionManager(_graphics.GraphicsDevice, new Resolution(1280, 720, false));
+            new ResolutionManager(_graphics, new Resolution(1280, 720, false));
             _graphics.ApplyChanges();
             new SceneManager(SceneChangeCallBack);            
         }
@@ -77,6 +77,9 @@ namespace EngineLite
             Stats.Instance.Add("EngineLite Version", GetVersion);
             Stats.Instance.Add("Delta Time", Time.GetDeltaString);
             Stats.Instance.Add("FPS", Time.GetFpsString);
+            Stats.Instance.Add("Screen to World", MouseScreenToWorld);
+            Stats.Instance.Add("World to Screen", MouseWorldToScreen);
+            Stats.Instance.Add("Draw Physics Degug", ShowPhysicsDebug);
             Stats.Instance.Add("Scene", SceneManager.Instance.GetActiveSceneName);
         }
 
@@ -159,5 +162,10 @@ namespace EngineLite
 
 
         private string GetVersion() => Version;
+        private string MouseScreenToWorld() => Camera.ScreenToWorld(Input.MousePos).ToString();
+        private string MouseWorldToScreen() => Camera.WorldToScreen(Input.MousePos).ToString();
+        private string ShowPhysicsDebug() => DrawDebug.ToString();
+
+
     }
 }

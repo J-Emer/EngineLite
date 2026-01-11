@@ -1,3 +1,4 @@
+using EngineLite.Engine.Core;
 using EngineLite.Engine.ECS.Components;
 using EngineLite.Engine.EngineDebug;
 using EngineLite.Engine.Utility;
@@ -8,8 +9,29 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace EngineLite.Engine.ECS.Systems
 {
+
+    public struct RayLineDebug
+    {
+        public Vector2 Start;
+        public Vector2 End;
+
+        public RayLineDebug(Vector2 _start, Vector2 _end)
+        {
+            Start = _start;
+            End = _end;
+        }
+    }
+
+
     public class PhysicsDebugDrawSystem : DrawSystem
     {
+
+        private List<RayLineDebug> _rays = new List<RayLineDebug>();
+
+        public void AddRay(Vector2 _start, Vector2 _end)
+        {
+            _rays.Add(new RayLineDebug(_start, _end));
+        }
 
         public override void Draw(SpriteBatch _spritebatch)
         {
@@ -20,6 +42,24 @@ namespace EngineLite.Engine.ECS.Systems
                 EntityWorld.Instance.GetComponent(entityId, out PhysicsBody physics);
 
                 DrawBody(_spritebatch, physics.Body);
+            }
+
+            foreach (var item in _rays)
+            {
+                Vector2 edge = item.End - item.Start;
+                float angle = (float)Math.Atan2(edge.Y, edge.X);
+
+                _spritebatch.Draw(
+                    AssetLoader.GetPixel(),
+                    position: item.Start,
+                    sourceRectangle: null,
+                    color: Color.White,
+                    rotation: angle,
+                    origin: Vector2.Zero,
+                    scale: new Vector2(edge.Length(), 3),
+                    effects: SpriteEffects.None,
+                    layerDepth: 0.2f
+                );
             }
         }
 

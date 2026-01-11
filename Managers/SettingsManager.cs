@@ -22,14 +22,17 @@ namespace EngineLite.Engine.Managers
                 {
                     using var sr = new StreamReader(_settingsFilePath);
                     Settings = JsonConvert.DeserializeObject<Settings>(sr.ReadToEnd()) ?? new Settings();
+                    Console.WriteLine($"SettingsManager: trying to load in {_settingsFilePath}");
                 }
                 catch
                 {
                     Settings = new Settings(); // fallback
+                    Console.WriteLine($"SettingsManager: Error loading: {_settingsFilePath} | falling back to default settings");
                 }
             }
             else
             {
+                Console.WriteLine($"SettingsManager: Settings File @: {_settingsFilePath} not found | falling back to default settings");
                 Settings = new Settings(); // create default
                 Push(); // save default to file
             }

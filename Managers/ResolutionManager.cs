@@ -10,7 +10,7 @@ namespace EngineLite.Engine.Managers
     {
         public static ResolutionManager Instance { get; private set; }
 
-        private readonly GraphicsDevice _graphicsDevice;
+        private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
         public Resolution ActiveResolution { get; private set; }
         private Resolution _normalResolution;
@@ -21,13 +21,13 @@ namespace EngineLite.Engine.Managers
 
         private readonly List<Resolution> _availableResolutions = new();
 
-        public ResolutionManager(GraphicsDevice graphicsDevice, Resolution initialResolution)
+        public ResolutionManager(GraphicsDeviceManager graphicsDevice, Resolution initialResolution)
         {
-            _graphicsDevice = graphicsDevice;
+            _graphicsDeviceManager = graphicsDevice;
             _normalResolution = initialResolution;
             ActiveResolution = initialResolution;
 
-            var maxMode = graphicsDevice.Adapter.SupportedDisplayModes
+            var maxMode = graphicsDevice.GraphicsDevice.Adapter.SupportedDisplayModes
                 .OrderByDescending(m => m.Width * m.Height)
                 .FirstOrDefault();
 
@@ -64,9 +64,11 @@ namespace EngineLite.Engine.Managers
 
         private void ApplyResolution(Resolution res)
         {
-            _graphicsDevice.PresentationParameters.BackBufferWidth = res.Width;
-            _graphicsDevice.PresentationParameters.BackBufferHeight = res.Height;
-            _graphicsDevice.PresentationParameters.IsFullScreen = res.IsFullScreen;
+            Console.WriteLine($"Applying Res: {res}");
+            _graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferWidth = res.Width;
+            _graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferHeight = res.Height;
+            _graphicsDeviceManager.GraphicsDevice.PresentationParameters.IsFullScreen = res.IsFullScreen;
+            _graphicsDeviceManager.ApplyChanges();
             // If using GraphicsDeviceManager in main game class, call ApplyChanges there
             OnResolutionChanged?.Invoke(res);
         }
@@ -77,7 +79,7 @@ namespace EngineLite.Engine.Managers
         {
             if (_availableResolutions.Count == 0)
             {
-                foreach (var mode in _graphicsDevice.Adapter.SupportedDisplayModes)
+                foreach (var mode in _graphicsDeviceManager.GraphicsDevice.Adapter.SupportedDisplayModes)
                 {
                     _availableResolutions.Add(new Resolution(mode.Width, mode.Height, false));
                 }
