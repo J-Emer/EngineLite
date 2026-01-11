@@ -111,6 +111,10 @@ namespace EngineLite
         {
             if(_needsSceneChange)
             {
+                EntityWorld.Instance.Clear();
+                PhysicsWorld.Clear();
+                UISystem.Instance.Children.Clear();
+                
                 SceneManager.Instance.HandleSceneChange();
                 _needsSceneChange = false;
                 SystemsManager.Instance.Initialize();

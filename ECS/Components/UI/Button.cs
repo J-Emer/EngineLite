@@ -38,7 +38,6 @@ namespace EngineLite.Engine.ECS.Components.UI
             //clicked
             if(CMouse && Input.GetMouseButtonDown(Input.MouseButton.Left))
             {
-                Console.WriteLine("button: clicked");
                 OnClick?.Invoke();
             }
 
