@@ -15,7 +15,7 @@ namespace EngineLite
 {
     public class GameEngine
     {
-        public static GameEngine Instance;
+        public static GameEngine? Instance;
         private GraphicsDeviceManager _graphics;
         public ContentManager Content{get; private set;}
         public GameWindow Window{get; private set;} 
@@ -114,7 +114,7 @@ namespace EngineLite
                 EntityWorld.Instance.Clear();
                 PhysicsWorld.Clear();
                 UISystem.Instance.Children.Clear();
-                
+
                 SceneManager.Instance.HandleSceneChange();
                 _needsSceneChange = false;
                 SystemsManager.Instance.Initialize();
@@ -125,6 +125,7 @@ namespace EngineLite
 
             if(IsPaused){return;}
 
+            //todo: this shouldn't be hard coded
             if(Input.GetKeyDown(Keys.P))
             {
                 DrawDebug = !DrawDebug;
@@ -134,6 +135,7 @@ namespace EngineLite
             PhysicsWorld.Update();
             SystemsManager.Instance.Update();
 
+            //todo: this shouldn't be here -> this should be a "Game" thing not an "Engine" thing
             if(Input.IsScrolling)
             {
                 Camera.Zoom += Input.ScrollWheelDelta * 0.1f;
@@ -156,6 +158,7 @@ namespace EngineLite
 
             OnScreenLog.Instance.Draw(spriteBatch);
 
+            //todo: this should not be here in a release
             Stats.Instance.Draw(spriteBatch);
 
             UISystem.Instance.Draw(spriteBatch);
