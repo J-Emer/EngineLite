@@ -101,5 +101,22 @@ namespace EngineLite.Engine.ECS.Components.UI
         }
     }
 
+    public class ColumnLayout : Layout
+    {
+        public override void HandleLayout(Rectangle parentRectangle, List<UIComponent> children, int Padding)
+        {
+            float childHeight = parentRectangle.Height - (Padding * 2);
+            int xPos = parentRectangle.X + Padding;
+            int yPos = parentRectangle.Y + Padding;
+
+            for (int i = 0; i < children.Count; i++)
+            {
+                children[i].Position = new Vector2(xPos, yPos);
+                children[i].Scale = new Vector2(children[i].Scale.X, childHeight);
+
+                xPos += (int)children[i].Scale.Y + Padding;
+            }            
+        }
+    }
 
 }
