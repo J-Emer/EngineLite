@@ -42,10 +42,10 @@ namespace EngineLite
             Instance = this;
         }
 
-        public void Load(Settings _settings, Vector2 cameraPos, float cameraZoom)
+        public void Load(string _settingsFilePath, Vector2 cameraPos, float cameraZoom)
         {
             Core();
-            Managers(_settings);
+            Managers(_settingsFilePath);
             Debug();
             ECS();
             LoadCamera(cameraPos, cameraZoom);
@@ -56,12 +56,11 @@ namespace EngineLite
             AssetLoader.Init(Content, _graphics.GraphicsDevice, _defaultFont);
         }
 
-        private void Managers(Settings _settings)
+        private void Managers(string _settingsFilePath)
         {
-            new SettingsManager(_settings);
+            new SettingsManager(_settingsFilePath);
             new WindowManager(Window);
-            new ResolutionManager(_graphics, new Resolution(1280, 720, false));
-            _graphics.ApplyChanges();
+            new ResolutionManager(_graphics);
             new SceneManager(SceneChangeCallBack);            
         }
 
@@ -73,13 +72,14 @@ namespace EngineLite
         private void Debug()
         {
             new OnScreenLog(AssetLoader.DefaultFont);
-            new Stats(new Vector2(1000, 10));          
+            new Stats(new Vector2(900, 10));          
             Stats.Instance.Add("EngineLite Version", GetVersion);
             Stats.Instance.Add("Delta Time", Time.GetDeltaString);
             Stats.Instance.Add("FPS", Time.GetFpsString);
             Stats.Instance.Add("Screen to World", MouseScreenToWorld);
             Stats.Instance.Add("World to Screen", MouseWorldToScreen);
             Stats.Instance.Add("Draw Physics Degug", ShowPhysicsDebug);
+            Stats.Instance.Add("Resolution", ResolutionManager.Instance.GetActiveResolution_String);
             Stats.Instance.Add("Scene", SceneManager.Instance.GetActiveSceneName);
         }
 

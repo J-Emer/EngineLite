@@ -12,47 +12,41 @@ namespace EngineLite.Engine.Managers
 
         private readonly string _settingsFilePath;
 
-        public SettingsManager(Settings _settings)
+        public SettingsManager(string settingsFilePath)
         {
-            Settings = _settings;
+            _settingsFilePath = settingsFilePath ?? throw new ArgumentNullException(nameof(settingsFilePath));
+
+            if (File.Exists(_settingsFilePath))
+            {
+                try
+                {
+                    using var sr = new StreamReader(_settingsFilePath);
+                    Settings = JsonConvert.DeserializeObject<Settings>(sr.ReadToEnd()) ?? new Settings();
+                    Console.WriteLine($"SettingsManager: loading file: {_settingsFilePath}");
+                }
+                catch
+                {
+                    Settings = new Settings(); // fallback
+                    Console.WriteLine($"SettingsManager: Error loading: {_settingsFilePath} | falling back to default settings");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"SettingsManager: Settings File @: {_settingsFilePath} not found | falling back to default settings");
+                Settings = new Settings(); // create default
+                Push(); // save default to file
+            }
+
             Instance = this;
         }
 
-        // public SettingsManager(string settingsFilePath)
-        // {
-        //     _settingsFilePath = settingsFilePath ?? throw new ArgumentNullException(nameof(settingsFilePath));
-
-        //     if (File.Exists(_settingsFilePath))
-        //     {
-        //         try
-        //         {
-        //             using var sr = new StreamReader(_settingsFilePath);
-        //             Settings = JsonConvert.DeserializeObject<Settings>(sr.ReadToEnd()) ?? new Settings();
-        //             Console.WriteLine($"SettingsManager: trying to load in {_settingsFilePath}");
-        //         }
-        //         catch
-        //         {
-        //             Settings = new Settings(); // fallback
-        //             Console.WriteLine($"SettingsManager: Error loading: {_settingsFilePath} | falling back to default settings");
-        //         }
-        //     }
-        //     else
-        //     {
-        //         Console.WriteLine($"SettingsManager: Settings File @: {_settingsFilePath} not found | falling back to default settings");
-        //         Settings = new Settings(); // create default
-        //         Push(); // save default to file
-        //     }
-
-        //     Instance = this;
-        // }
-
-        // /// <summary>
-        // /// Save current settings to JSON file
-        // /// </summary>
-        // public void Push()
-        // {
-        //     using var sw = new StreamWriter(_settingsFilePath);
-        //     sw.Write(JsonConvert.SerializeObject(Settings, Formatting.Indented));
-        // }
+        /// <summary>
+        /// Save current settings to JSON file
+        /// </summary>
+        public void Push()
+        {
+            using var sw = new StreamWriter(_settingsFilePath);
+            sw.Write(JsonConvert.SerializeObject(Settings, Formatting.Indented));
+        }
     }
 }
