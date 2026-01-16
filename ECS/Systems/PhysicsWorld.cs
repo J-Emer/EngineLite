@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using EngineLite.Engine.Core;
 using EngineLite.Engine.ECS.Components;
+using EngineLite.Engine.Managers;
 using EngineLite.Engine.Utility;
 using Microsoft.Xna.Framework;
 using nkast.Aether.Physics2D.Collision;
@@ -21,7 +22,7 @@ namespace EngineLite.Engine.ECS.Systems
         // ---------------------------------------------
         public static void Init()
         {
-            World = new World(new Vector2(0, 9.8f)); // TODO: pull from settings
+            World = new World(SettingsManager.Instance.Settings.GravityDirection); 
 
             World.ContactManager.BeginContact += OnBeginContact;
             World.ContactManager.EndContact += OnEndContact;

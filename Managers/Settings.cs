@@ -9,7 +9,7 @@ namespace EngineLite.Engine.Managers
         public Color ClearColor { get; set; } = Color.CornflowerBlue;
         public Color AmbientColor { get; set; } = new Color(0, 0, 0, 150);
         public string FirstScene { get; set; } = "Demo";
-        public Vector2 GravityDirection { get; set; } = new Vector2(0, 10);
+        public Vector2 GravityDirection { get; set; } = new Vector2(0, 9.8f);
 
         public override string ToString()
         {
