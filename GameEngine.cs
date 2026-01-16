@@ -144,6 +144,8 @@ namespace EngineLite
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            _graphics.GraphicsDevice.Clear(SettingsManager.Instance.Settings.ClearColor);
+
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
 
             SystemsManager.Instance.Draw(spriteBatch);

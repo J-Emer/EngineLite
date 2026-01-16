@@ -9,7 +9,7 @@ namespace EngineLite.Engine.ECS.Components
     {
         [JsonIgnore]
         public Fixture Fixture{get;set;}
-
+        public float Friction{get;set;} = 0.5f;
         public bool HasInitialized{get;set;} = false;
         public Vector2 Size{get;set;} = Vector2.One;
         public float Density{get;set;} = 1f;

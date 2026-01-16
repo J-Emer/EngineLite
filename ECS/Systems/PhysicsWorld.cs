@@ -80,19 +80,14 @@ namespace EngineLite.Engine.ECS.Systems
                 ConvertUnits.ToSimUnits(physicsBody.Rotation),
                 physicsBody.BodyType);
 
-            // ECS <-> Physics link
             physicsBody.Body.Tag = entityId;
 
             float width  = ConvertUnits.ToSimUnits(collider.Size.X);
             float height = ConvertUnits.ToSimUnits(collider.Size.Y);
             Vector2 offset = ConvertUnits.ToSimUnits(collider.Offset);
 
-            collider.Fixture = physicsBody.Body.CreateRectangle(
-                width,
-                height,
-                collider.Density,
-                offset);
-
+            collider.Fixture = physicsBody.Body.CreateRectangle(width, height, collider.Density, offset);
+            collider.Fixture.Friction = collider.Friction;
             collider.HasInitialized = true;
             physicsBody.HasInitialized = true;
         }
