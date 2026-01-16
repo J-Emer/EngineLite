@@ -25,6 +25,8 @@ namespace EngineLite.Engine.Managers
 
         private void FileDrop(object sender, FileDropEventArgs e)
         {
+            // int width = Window.ClientBounds.Width;
+            // int height = Window.ClientBounds.Height;
            //todo: do Engine specific things when a file is dropped on screen
             OnFileDrop?.Invoke(sender, e);
         }

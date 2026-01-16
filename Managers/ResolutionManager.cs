@@ -38,9 +38,17 @@ namespace EngineLite.Engine.Managers
 
             Instance = this;
 
-            HandleResolution();
+            WindowManager.Instance.OnClientSizeChanged += WindowSizeChanged;
 
-            Console.WriteLine($"Resolution Manager: {ActiveResolution}");
+            HandleResolution();
+        }
+
+        private void WindowSizeChanged(object? sender, EventArgs e)
+        {
+            GameWindow _window = (GameWindow)sender;
+            int x = _window.ClientBounds.Width;
+            int y = _window.ClientBounds.Height;
+            SetResolution(new Resolution(x,y,false));
         }
 
         public void ToggleFullScreen()
