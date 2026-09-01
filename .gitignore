@@ -1,0 +1,51 @@
+# ---- Personal / dev notes ----
+notes.txt
+
+# ---- .NET build output ----
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+
+# ---- Visual Studio ----
+.vs/
+*.sln.docstates
+
+# ---- VS Code ----
+.vscode/
+
+# ---- Rider ----
+.idea/
+*.sln.iml
+
+# ---- NuGet ----
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+# ---- MonoGame content pipeline build cache ----
+# (safe to keep if you WANT built content in source control; usually you don't)
+Content/bin/
+Content/obj/
+
+# ---- Build results ----
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild/
+[Ll]og/
+[Ll]ogs/
+
+# ---- OS junk ----
+.DS_Store
+Thumbs.db
+
+# ---- Misc ----
+*.pdb
+*.cache
+*.tmp
