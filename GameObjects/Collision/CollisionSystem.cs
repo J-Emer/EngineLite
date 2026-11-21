@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using EngineLite.GameObjects.Components;
 
 namespace EngineLite.GameObjects.Collision
 {
@@ -13,11 +10,6 @@ namespace EngineLite.GameObjects.Collision
     /// OnCollisionEnter/Stay/Exit on the involved BoxColliders, and exposes Raycast and
     /// BoxOverlap queries.
     ///
-    /// Usage:
-    ///   var collisionSystem = new CollisionSystem(cellSize: 64f);
-    ///   collisionSystem.Register(someBoxCollider);
-    ///   // each frame, after moving objects, before drawing:
-    ///   collisionSystem.Update();
     /// </summary>
     public sealed class CollisionSystem
     {

@@ -6,23 +6,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EngineLiteTest.Managers
 {
-    public class DebugScreen : IDisposable
+    public class DebugScreen
     {
         private readonly List<(string Label, Func<string> Callback)> _stats = new();
         private readonly StringBuilder _sb = new();
-        private bool _canDraw;
-
         public Vector2 Position { get; set; } = new Vector2(10, 10);
         public int YOffset { get; set; } = 20;
         public Color FontColor { get; set; } = Color.White;
 
-        public DebugScreen()
-        {
-            _canDraw = Engine.Instance.ShowDebug;
-            Engine.Instance.OnDebugStateChanged += DebugStateChanged;
-        }
 
-        private void DebugStateChanged(bool value) => _canDraw = value;
+
+
+
 
         public void Add(string label, Func<string> callback)
         {
@@ -37,7 +32,7 @@ namespace EngineLiteTest.Managers
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (!_canDraw) return;
+            if (!Engine.Instance.ShowDebug) return;
 
             Vector2 pos = Position;
 
@@ -58,9 +53,5 @@ namespace EngineLiteTest.Managers
             }
         }
 
-        public void Dispose()
-        {
-            Engine.Instance.OnDebugStateChanged -= DebugStateChanged;
-        }
     }
 }
