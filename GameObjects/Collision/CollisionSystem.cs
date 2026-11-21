@@ -31,8 +31,6 @@ namespace EngineLite.GameObjects.Collision
         private HashSet<(BoxCollider a, BoxCollider b)> _previousPairs = new();
 
         // --- Debug draw ---
-        /// <summary>Toggle to draw an outline rectangle around every registered collider.</summary>
-        public bool DebugDrawEnabled { get; set; } = true;
         public Color DebugStaticColor { get; set; } = Color.Yellow;
         public Color DebugDynamicColor { get; set; } = Color.Lime;
         public Color DebugTriggerColor { get; set; } = Color.Cyan;
@@ -45,11 +43,6 @@ namespace EngineLite.GameObjects.Collision
         {
             _grid = new SpatialHashGrid(cellSize);
         }
-
-        // public void Initialize(float cellSize = 64f)
-        // {
-        //     _grid = new SpatialHashGrid(cellSize);
-        // }
 
         public void Register(BoxCollider collider)
         {
@@ -498,16 +491,14 @@ namespace EngineLite.GameObjects.Collision
 
         /// <summary>
         /// Draws an outline rectangle around every registered, enabled collider. No-ops if
-        /// <see cref="DebugDrawEnabled"/> is false, so it's safe to call unconditionally every
+        /// <see cref="Engine.Instance.ShowDebug"/> is false, so it's safe to call unconditionally every
         /// frame and just flip the flag to toggle it. Call between spriteBatch.Begin()/End(),
-        /// same as your normal sprite drawing.
         ///
         /// Colors: yellow = static, green = dynamic, cyan = trigger, red = currently overlapping
-        /// something (overrides the others so active collisions stand out).
         /// </summary>
         public void DrawDebug(SpriteBatch spriteBatch)
         {
-            if (!DebugDrawEnabled) return;
+            if (!Engine.Instance.ShowDebug) return;
 
             EnsureDebugPixel(spriteBatch.GraphicsDevice);
 

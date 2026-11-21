@@ -64,7 +64,7 @@ namespace EngineLite
         public void LoadContent(string defaultFont, List<Scene> scenes, string firstScene)
         {
             AssetLoader.Init(Game.Content, Game.GraphicsDevice, defaultFont);
-            
+
             ResolutionManager = new ResolutionManager(Graphics, new Resolution(1280, 720, false));
             SceneManager = new SceneManager(scenes);
 
@@ -142,10 +142,7 @@ namespace EngineLite
             spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, MainCamera.Instance.GetViewMatrix());
             World.Draw(spriteBatch);
             
-            if(ShowDebug)
-            {
-                CollisionSystem.DrawDebug(spriteBatch);
-            }
+            CollisionSystem.DrawDebug(spriteBatch);
 
             spriteBatch.End();            
 
