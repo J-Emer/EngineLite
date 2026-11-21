@@ -11,7 +11,6 @@ namespace EngineLite.GameObjects.Components
         [JsonIgnore]
         public Texture2D Texture { get; set; }
         public string TextureName { get; set; }
-
         public Rectangle SourceRectangle { get; set; } = new Rectangle();
         public SpriteEffects Effects { get; set; } = SpriteEffects.None;
         public Color DrawColor { get; set; } = Color.White;
@@ -24,9 +23,9 @@ namespace EngineLite.GameObjects.Components
             SourceRectangle = sourceRectangle;
         }
 
-        public Sprite()
+        public Sprite(string textureName)
         {
-            
+            TextureName = textureName;
         }
 
         public override void Start()
