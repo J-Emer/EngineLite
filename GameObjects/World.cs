@@ -21,15 +21,13 @@ namespace EngineLite.GameObjects
         public int GameObjectsCount => gameObjects.Count;
         public int ToAddCount => _toadd.Count;
         public int ToRemoveCount => _toremove.Count;
+        public List<GameObject> Gameobjects => gameObjects;
 
 
         public event Action OnGameobjectsChanged;
 
 
-        public World()
-        {
-            Engine.Instance.SceneManager.BeforeSceneChange += Clear;
-        }
+
 
         private int GetNextID()
         {
@@ -121,7 +119,7 @@ namespace EngineLite.GameObjects
         }
 
 
-        private void Clear()
+        public void Clear()
         {
             _toadd.ForEach(x => x.OnDestroy());
             gameObjects.ForEach(x => x.OnDestroy());

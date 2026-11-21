@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using EngineLite.Core;
+﻿using EngineLite.Core;
 using EngineLite.Managers;
 using EngineLite.UI;
 using EngineLite.Util;
@@ -10,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Penumbra;
+using EngineLiteTest.Managers;
 
 namespace EngineLite
 {
@@ -19,7 +18,7 @@ namespace EngineLite
         public static Engine Instance{get; private set;}
         private Game Game;
         public GraphicsDeviceManager Graphics{get; private set;}
-        public StatManager StatManager{get; private set;}
+        public DebugScreen DebugScreen{get; private set;}
         public SceneManager SceneManager{get; private set;}
         public ResolutionManager ResolutionManager{get; private set;}
 
@@ -30,12 +29,7 @@ namespace EngineLite
             get => Game.IsMouseVisible;
             set => Game.IsMouseVisible = value;
         }
-        public bool ShowDebug{get; private set;} = false;
-        public bool ShowStats
-        {
-            get => StatManager.ShowStats;
-            set => StatManager.ShowStats = value;
-        }
+        public bool ShowDebug{get;set;} = true;
 
         public World World{get; private set;}
         public CollisionSystem CollisionSystem{get; private set;}
@@ -67,29 +61,33 @@ namespace EngineLite
             Instance = this;
         }
 
-
         public void LoadContent(string defaultFont, List<Scene> scenes, string firstScene)
         {
             AssetLoader.Init(Game.Content, Game.GraphicsDevice, defaultFont);
-            ShapeRenderer.Init(Game.GraphicsDevice);
-
+            
             ResolutionManager = new ResolutionManager(Graphics, new Resolution(1280, 720, false));
             SceneManager = new SceneManager(scenes);
 
             //todo: pass the SceneManager to the constrtuctor -> if order of 
             //operations (world created before SceneManager) changes could throw a null ref exception
             World = new World();
+            SceneManager.BeforeSceneChange += BeforeSceneChange;
+
             CollisionSystem = new CollisionSystem(64);
-            new GameUIRenderer(Game, "font");
+
+            new GameUIRenderer(Game, "font"); //---this is a singleton for now
             
             LightSystem = new PenumbraComponent(Game);
             LightSystem.Initialize();
 
-
-            StatManager = new StatManager(AssetLoader.DefaultFont);
-            StatManager.Add("FPS", () => Time.FPS.ToString());
-            StatManager.Add("Scene", () => SceneManager.ActiveSceneName);
-            StatManager.Add("Gameobjects", () => "???");
+            DebugScreen = new DebugScreen();
+            DebugScreen.Position = new Vector2(1050, 10);
+            DebugScreen.Add("Version", () => Version.ToString());
+            DebugScreen.Add("FPS", () => Time.FPS.ToString());
+            DebugScreen.Add("Scene", () => SceneManager.ActiveSceneName);
+            DebugScreen.Add("Gameobjects", () => World.GameObjectsCount.ToString());
+            DebugScreen.Add("Cam Pos - World", () => MainCamera.Instance.Position.ToString());
+            DebugScreen.Add("Mouse - World", () => MainCamera.Instance.ScreenToWorld(Input.MousePosition).ToString());
 
             new MainCamera(Game.GraphicsDevice.Viewport);
             
@@ -98,10 +96,9 @@ namespace EngineLite
             Logger.Log(this, Version);
         }
 
-        public void ToggleDebug()
+        private void BeforeSceneChange()
         {
-            ShowDebug = !ShowDebug;
-            LightSystem.Debug = ShowDebug;
+            World.Clear();
         }
 
         public void Update(GameTime gameTime)
@@ -116,7 +113,6 @@ namespace EngineLite
 
             if(Input.GetKeyDown(Keys.Q))
             {
-                Logger.Log(this, "Toggle Editor Controls");
                 ShowDebug = !ShowDebug;
                 OnDebugStateChanged?.Invoke(ShowDebug);
             }
@@ -132,16 +128,15 @@ namespace EngineLite
         public void Draw(SpriteBatch spriteBatch)
         {
 
-            //StatManager
-            spriteBatch.Begin();
-            StatManager.Draw(spriteBatch);
-            spriteBatch.End();
-
-
             LightSystem.Transform = MainCamera.Instance.GetViewMatrix();
             LightSystem.BeginDraw();
 
             Game.GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            //StatManager
+            spriteBatch.Begin();
+            DebugScreen.Draw(spriteBatch);
+            spriteBatch.End();
 
             //Game
             spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, MainCamera.Instance.GetViewMatrix());

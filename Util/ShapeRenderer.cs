@@ -1,4 +1,5 @@
 ﻿using System;
+using EngineLite.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -6,19 +7,13 @@ namespace EngineLite.Util
 {
     public static class ShapeRenderer
     {
-        private static Texture2D pixel;
-        public static void Init(GraphicsDevice graphicsDevice)
-        {
-            pixel = new Texture2D(graphicsDevice, 1, 1);
-            pixel.SetData(new[] { Color.White });
-        }
         public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangle, Color drawColor)
         {
-            spriteBatch.Draw(pixel, rectangle, drawColor);
+            spriteBatch.Draw(AssetLoader.Pixel, rectangle, drawColor);
         }
         public static void DrawRectangle(SpriteBatch spriteBatch, Point min, Point max, Color drawColor)
         {
-            spriteBatch.Draw(pixel, CreateRectangleFromTwoPoints(min, max), drawColor);
+            spriteBatch.Draw(AssetLoader.Pixel, CreateRectangleFromTwoPoints(min, max), drawColor);
         }
         public static void DrawRectangle(SpriteBatch spriteBatch, Vector2[] points, Color color)
         {
@@ -34,7 +29,7 @@ namespace EngineLite.Util
             float angle = (float)Math.Atan2(edge.Y, edge.X);
 
             spriteBatch.Draw(
-                pixel,
+                AssetLoader.Pixel,
                 start,
                 null,
                 color,
