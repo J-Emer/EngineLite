@@ -52,6 +52,7 @@ namespace EngineLite
         {
             Game = _game;
             Graphics = _graphicsManager;
+            Game.Window.AllowUserResizing = true;
 
             if(Instance != null)
             {
