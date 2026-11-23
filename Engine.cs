@@ -40,7 +40,7 @@ namespace EngineLite
             get => LightSystem.AmbientColor;
             set => LightSystem.AmbientColor = value;
         } 
-
+        public HotKeyManager HotKeyManager{get; private set;}
 
 
         public event Action<bool> OnDebugStateChanged;
@@ -53,6 +53,7 @@ namespace EngineLite
             Game = _game;
             Graphics = _graphicsManager;
             Game.Window.AllowUserResizing = true;
+            Game.Window.ClientSizeChanged += ClientSizeChanged;
 
             if(Instance != null)
             {
@@ -60,6 +61,12 @@ namespace EngineLite
             }
 
             Instance = this;
+        }
+
+        private void ClientSizeChanged(object sender, EventArgs e)
+        {
+            int left = Graphics.PreferredBackBufferWidth - 300;
+            DebugScreen.Position = new Vector2(left, 10); 
         }
 
         public void LoadContent(string defaultFont, List<Scene> scenes, string firstScene)
@@ -82,18 +89,38 @@ namespace EngineLite
             LightSystem.Initialize();
 
             DebugScreen = new DebugScreen();
-            DebugScreen.Position = new Vector2(1050, 10);
+            int left = Graphics.PreferredBackBufferWidth - 300;
+            DebugScreen.Position = new Vector2(left, 10);
             DebugScreen.Add("Version", () => Version.ToString());
             DebugScreen.Add("FPS", () => Time.FPS.ToString());
             DebugScreen.Add("Scene", () => SceneManager.ActiveSceneName);
             DebugScreen.Add("Gameobjects", () => World.GameObjectsCount.ToString());
             DebugScreen.Add("Cam Pos - World", () => MainCamera.Instance.Position.ToString());
             DebugScreen.Add("Mouse - World", () => MainCamera.Instance.ScreenToWorld(Input.MousePosition).ToString());
+            DebugScreen.Add("Toggle Debug", () => "Q:Key");
+            DebugScreen.Add("Exit", () => "Esc:Key");
+            DebugScreen.Add("Toggle FullScreen", () => "T:Key");
 
             new MainCamera(Game.GraphicsDevice.Viewport);
             
-            SceneManager.LoadScene(firstScene);
+            HotKeyManager = new HotKeyManager();
 
+            HotKeyManager.Add(Keys.Q, () =>
+            {
+                ShowDebug = !ShowDebug;
+                OnDebugStateChanged?.Invoke(ShowDebug);
+            });
+            HotKeyManager.Add(Keys.T, () =>
+            {
+                ResolutionManager.ToggleFullScreen();
+            });
+            HotKeyManager.Add(Keys.Escape, () =>
+            {
+                Game.Exit();
+            });
+
+
+            SceneManager.LoadScene(firstScene);
             Logger.Log(this, Version);
         }
 
@@ -104,19 +131,8 @@ namespace EngineLite
 
         public void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Game.Exit();                
-            }
-
             Time.Update(gameTime);
             Input.Update();
-
-            if(Input.GetKeyDown(Keys.Q))
-            {
-                ShowDebug = !ShowDebug;
-                OnDebugStateChanged?.Invoke(ShowDebug);
-            }
 
             if(IsPaused){return;}
 
@@ -124,6 +140,8 @@ namespace EngineLite
             World.Update();
             CollisionSystem.Update();
             GameUIRenderer.Instance.Update();
+
+            HotKeyManager.Update();
         }
 
         public void Draw(SpriteBatch spriteBatch)
